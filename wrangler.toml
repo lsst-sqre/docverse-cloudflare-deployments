@@ -1,0 +1,23 @@
+name = "docverse"
+main = "worker/src/index.ts"
+compatibility_date = "2026-04-09"
+compatibility_flags = ["nodejs_compat"]
+
+# No top-level bindings — testing happens in the docverse source repo.
+# All bindings are defined per-environment below.
+
+# ============================================================================
+# jsc-test-20260409 organization on roundtable-dev
+# Deployed worker: docverse-dev-jsc-test-20260409
+# Access: docverse-dev-jsc-test-20260409.<account>.workers.dev
+# ============================================================================
+[env.dev-jsc-test-20260409.vars]
+URL_SCHEME = "path-prefix"
+
+[[env.dev-jsc-test-20260409.kv_namespaces]]
+binding = "EDITIONS_KV"
+id = "35e1117666814823a27689d1f3afa8fe"
+
+[[env.dev-jsc-test-20260409.r2_buckets]]
+binding = "BUILDS_R2"
+bucket_name = "docverse-dev-jsc-test-20260409-builds"
