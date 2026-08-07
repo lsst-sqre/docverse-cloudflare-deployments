@@ -4,7 +4,7 @@ Cloudflare Worker deployment configurations for [Rubin Observatory's Docverse](h
 
 The Worker source code lives in the [lsst-sqre/docverse](https://github.com/lsst-sqre/docverse) monorepo under `cloudflare-worker/`.
 This repository provides per-environment Wrangler configuration (`wrangler.toml`) and the root `package.json` needed to run `npx wrangler deploy`.
-At deploy time the `docverse-admin deploy-worker` CLI packs the worker source into this repo's `worker/` directory (gitignored) and invokes Wrangler.
+At deploy time the `docverse deploy-worker` CLI packs the worker source into this repo's `worker/` directory (gitignored) and invokes Wrangler.
 
 For architecture details see [SQR-112](https://sqr-112.lsst.io).
 
@@ -52,10 +52,10 @@ The bucket name in `wrangler.toml` must match exactly.
 
 ## Deploying
 
-Deployment is handled by the `docverse-admin deploy-worker` CLI from the [lsst-sqre/docverse](https://github.com/lsst-sqre/docverse) package:
+Deployment is handled by the `docverse deploy-worker` CLI from the [`docverse` client package](https://github.com/lsst-sqre/docverse/tree/main/client):
 
 ```bash
-docverse-admin deploy-worker \
+docverse deploy-worker \
   --docverse-repo /path/to/docverse \
   --deployments-repo /path/to/docverse-cloudflare-deployments \
   --env dev-jsc-test-20260409
@@ -66,7 +66,9 @@ Add `--dry-run` to build the bundle without deploying.
 The CLI:
 1. Runs `npm pack` in the docverse `cloudflare-worker/` directory
 2. Extracts the tarball into `worker/` in this repo
-3. Runs `npx wrangler deploy --env <env>` from this repo root
+3. Copies `package-lock.json` in alongside it — `npm pack` always excludes lockfiles
+4. Runs `npm ci --omit=dev` in `worker/` to install runtime dependencies
+5. Runs `npx wrangler deploy --env <env>` from this repo root
 
 ## URL routing
 
