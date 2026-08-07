@@ -13,7 +13,7 @@ For more background on Docverse's architecture, see [SQR-112](https://sqr-112.ls
 
 - `wrangler.toml` — Wrangler configuration with base settings and per-environment bindings.
 - `package.json` — Root `devDependency` on `wrangler` so `npx wrangler deploy` works.
-- `worker/` — Populated at deploy time by `docverse-admin deploy-worker`; gitignored.
+- `worker/` — Populated at deploy time by `docverse deploy-worker`; gitignored.
 
 ## wrangler.toml conventions
 
@@ -50,10 +50,12 @@ Cloudflare resources follow predictable names derived from the environment:
 
 ## Deployment process
 
-Deployment is handled by the `docverse-admin deploy-worker` CLI (in [lsst-sqre/docverse](https://github.com/lsst-sqre/docverse)):
+Deployment is handled by the `docverse deploy-worker` CLI, shipped by the [`docverse` client package](https://github.com/lsst-sqre/docverse/tree/main/client):
 
 1. `npm pack` the `cloudflare-worker/` directory in the docverse repo
 2. Extract the tarball into `worker/` in this repo
-3. `npx wrangler deploy --env <env>` from this repo root
+3. Copy `package-lock.json` in alongside it — `npm pack` always excludes lockfiles
+4. `npm ci --omit=dev` in `worker/` to install runtime dependencies
+5. `npx wrangler deploy --env <env>` from this repo root
 
 The `worker/` directory and `node_modules/` are gitignored.
