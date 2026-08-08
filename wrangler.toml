@@ -21,3 +21,26 @@ id = "35e1117666814823a27689d1f3afa8fe"
 [[env.dev-jsc-test-20260409.r2_buckets]]
 binding = "BUILDS_R2"
 bucket_name = "docverse-dev-jsc-test-20260409-builds"
+
+# ============================================================================
+# jsc-test-20260807 organization on roundtable-dev
+# Deployed worker: docverse-dev-jsc-test-20260807
+# Subdomain URL scheme: each project served at {project}.jsc-docverse.ca
+# Requires a proxied wildcard DNS record (* A 192.0.2.1) in the zone.
+# ============================================================================
+[env.dev-jsc-test-20260807]
+workers_dev = false
+routes = [
+  { pattern = "*.jsc-docverse.ca/*", zone_name = "jsc-docverse.ca" }
+]
+
+[env.dev-jsc-test-20260807.vars]
+URL_SCHEME = "subdomain"
+
+[[env.dev-jsc-test-20260807.kv_namespaces]]
+binding = "EDITIONS_KV"
+id = "26c98005cffc42768890793dde4db42b"
+
+[[env.dev-jsc-test-20260807.r2_buckets]]
+binding = "BUILDS_R2"
+bucket_name = "docverse-dev-jsc-test-20260807-builds"
