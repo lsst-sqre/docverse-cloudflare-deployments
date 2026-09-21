@@ -209,3 +209,4 @@ __marimo__/
 # Cloudflare Worker artifacts
 worker/
 node_modules/
+.wrangler/

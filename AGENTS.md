@@ -46,7 +46,8 @@ Each environment must define:
 Cloudflare resources follow predictable names derived from the environment:
 
 - KV namespace: `docverse-{tier}-{org}-editions`
-- R2 bucket: `docverse-{tier}-{org}-builds`
+- R2 bucket (builds): `docverse-{tier}-{org}-builds`
+- R2 bucket (staging, optional): `docverse-{tier}-{org}-staging` — used only by the Docverse server as an organization's staging store; never bound to the worker, so it appears in `wrangler.toml` only as a comment. Leave the organization's staging slot unset until [lsst-sqre/docverse#663](https://github.com/lsst-sqre/docverse/issues/663) is fixed.
 
 ## Deployment process
 

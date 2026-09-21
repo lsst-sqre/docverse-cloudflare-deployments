@@ -44,3 +44,35 @@ id = "26c98005cffc42768890793dde4db42b"
 [[env.dev-jsc-test-20260807.r2_buckets]]
 binding = "BUILDS_R2"
 bucket_name = "docverse-dev-jsc-test-20260807-builds"
+
+# ============================================================================
+# rubin organization on roundtable (production)
+# Deployed worker: docverse-production-rubin
+# Cloudflare account: Rubin SQuaRE (distinct from the roundtable-dev account)
+# Subdomain URL scheme: each project served at {project}.docverse-testing.dev
+# during the LTD sync period; an *.lsst.io route is added at cutover.
+# Requires a proxied wildcard DNS record (* A 192.0.2.1) in the zone.
+#
+# The account also holds docverse-production-rubin-staging, intended as the
+# Docverse server's upload staging store. It is unused for now: the rubin org
+# stages and publishes through the builds bucket until the server supports
+# split stores (lsst-sqre/docverse#663). The worker only ever reads the
+# builds bucket, so the staging bucket has no binding here.
+# ============================================================================
+[env.production-rubin]
+account_id = "4268a931520ee81c56e48984b40069ca"
+workers_dev = false
+routes = [
+  { pattern = "*.docverse-testing.dev/*", zone_name = "docverse-testing.dev" }
+]
+
+[env.production-rubin.vars]
+URL_SCHEME = "subdomain"
+
+[[env.production-rubin.kv_namespaces]]
+binding = "EDITIONS_KV"
+id = "d53a03631965443cafbb5114c4693d24"
+
+[[env.production-rubin.r2_buckets]]
+binding = "BUILDS_R2"
+bucket_name = "docverse-production-rubin-builds"

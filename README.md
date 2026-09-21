@@ -28,7 +28,8 @@ Environments and resources follow the pattern `{tier}-{org}`:
 | Wrangler environment | `{tier}-{org}` | `dev-jsc-test-20260409` |
 | Deployed worker name | `docverse-{tier}-{org}` | `docverse-dev-jsc-test-20260409` |
 | KV namespace | `docverse-{tier}-{org}-editions` | `docverse-dev-jsc-test-20260409-editions` |
-| R2 bucket | `docverse-{tier}-{org}-builds` | `docverse-dev-jsc-test-20260409-builds` |
+| R2 bucket (builds) | `docverse-{tier}-{org}-builds` | `docverse-dev-jsc-test-20260409-builds` |
+| R2 bucket (staging, optional) | `docverse-{tier}-{org}-staging` | `docverse-production-rubin-staging` |
 
 ## Creating Cloudflare resources
 
@@ -49,6 +50,20 @@ npx wrangler r2 bucket create "docverse-{tier}-{org}-builds"
 ```
 
 The bucket name in `wrangler.toml` must match exactly.
+
+### Staging R2 bucket (optional)
+
+An organization can stage uploads in a separate bucket from the one it publishes from:
+
+```bash
+npx wrangler r2 bucket create "docverse-{tier}-{org}-staging"
+```
+
+The staging bucket is used only by the Docverse server, as the organization's `staging_store_label` service.
+It is never bound to the worker, which only reads the builds bucket, so it has no entry in `wrangler.toml` beyond a comment in the environment's header.
+
+Until [lsst-sqre/docverse#663](https://github.com/lsst-sqre/docverse/issues/663) is fixed, leave the organization's staging slot unset.
+With a separate staging store the server unpacks uploaded builds into the staging bucket, where the worker cannot serve them.
 
 ## Deploying
 
