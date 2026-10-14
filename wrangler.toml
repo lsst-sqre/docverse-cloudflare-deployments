@@ -50,8 +50,11 @@ bucket_name = "docverse-dev-jsc-test-20260807-builds"
 # Deployed worker: docverse-production-rubin
 # Cloudflare account: Rubin SQuaRE (distinct from the roundtable-dev account)
 # Subdomain URL scheme: each project served at {project}.docverse-testing.dev
-# during the LTD sync period; an *.lsst.io route is added at cutover.
-# Requires a proxied wildcard DNS record (* A 192.0.2.1) in the zone.
+# during the LTD sync period. The *.lsst.io route is attached ahead of the
+# cutover; it only fires for proxied lsst.io hostnames, so it is inert until
+# a record in that zone is proxied. The worker takes the project slug from
+# the leftmost host label, so both routes share the same bindings.
+# Requires a proxied wildcard DNS record (* A 192.0.2.1) in each zone.
 #
 # The account also holds docverse-production-rubin-staging, intended as the
 # Docverse server's upload staging store. It is unused for now: the rubin org
@@ -63,7 +66,8 @@ bucket_name = "docverse-dev-jsc-test-20260807-builds"
 account_id = "4268a931520ee81c56e48984b40069ca"
 workers_dev = false
 routes = [
-  { pattern = "*.docverse-testing.dev/*", zone_name = "docverse-testing.dev" }
+  { pattern = "*.docverse-testing.dev/*", zone_name = "docverse-testing.dev" },
+  { pattern = "*.lsst.io/*", zone_name = "lsst.io" }
 ]
 
 [env.production-rubin.vars]
